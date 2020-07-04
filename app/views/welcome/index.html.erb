@@ -1,0 +1,22 @@
+<button id="signinButton">Sign in with Google</button>
+<script>
+    function signInCallback(authResult) {
+        if (authResult['code']) {
+            data = {
+                code: authResult['code'],
+            }
+            jQuery.ajax({
+                type: 'POST',
+                url: 'http://localhost:3000/login',
+                data: data,
+                success: function(data) {
+                }
+            });
+        } else {
+        }
+    }
+
+    $('#signinButton').click(function() {
+        auth2.grantOfflineAccess().then(signInCallback);
+    });
+</script>
