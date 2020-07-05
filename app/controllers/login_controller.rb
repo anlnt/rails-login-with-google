@@ -5,16 +5,10 @@ class LoginController < ApplicationController
 
   def create
     client = Signet::OAuth2::Client.new(
-        :authorization_uri => 'https://accounts.google.com/o/oauth2/auth',
         :token_credential_uri =>  'https://oauth2.googleapis.com/token',
         :client_id => ENV['GOOGLE_CLIENT_ID'],
         :client_secret => ENV['GOOGLE_CLIENT_SECRET'],
-        :scope => params[:scope],
-        :grant_type => 'authorization_code',
         :redirect_uri => 'postmessage',
-        :additional_parameters => {
-            :access_type => "offline"
-        }
     )
     client.code = params[:code]
     gg_access_token = client.fetch_access_token!
