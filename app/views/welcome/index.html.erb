@@ -1,22 +1,27 @@
 <button id="signinButton">Sign in with Google</button>
 <script>
-    function signInCallback(authResult) {
-        if (authResult['code']) {
-            data = {
-                code: authResult['code'],
-            }
-            jQuery.ajax({
-                type: 'POST',
-                url: 'http://localhost:3000/login',
-                data: data,
-                success: function(data) {
-                }
-            });
-        } else {
-        }
-    }
+    function start() {
+        gapi.load('auth2', function() {
+            $('#signinButton').click(function(e) {
+                e.preventDefault();
 
-    $('#signinButton').click(function() {
-        auth2.grantOfflineAccess().then(signInCallback);
-    });
+                gapi.auth2.authorize({
+                    client_id: '484690844721-2j7ar8je871q6coh73skh2vd4dv7kp22.apps.googleusercontent.com',
+                    cookie_policy: 'single_host_origin',
+                    scope: 'email profile',
+                    response_type: 'code'
+                }, function(response) {
+                    if (response && !response.error) {
+                        jQuery.ajax({type: 'POST', url: 'http://localhost:3000/login', data: response,
+                            success: function(data) {
+                                // response from server
+                            }
+                        });
+                    } else {
+                        // google authentication failed
+                    }
+                });
+            });
+        });
+    };
 </script>
